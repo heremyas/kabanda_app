@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "176102628641",
+    "project_id": "kabanda-8d635",
+    "storage_bucket": "kabanda-8d635.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176102628641:android:1f673c6bf66b137daf3260",
+        "android_client_info": {
+          "package_name": "com.example.kabanda_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176102628641-fg89t4m8bsl5p7ndi9rui6m9svsgs01t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdeMx7erCTn5Zu0LudldR5PKBoy8NCp_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176102628641-fg89t4m8bsl5p7ndi9rui6m9svsgs01t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
