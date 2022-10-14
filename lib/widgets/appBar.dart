@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kabanda_app/utilities/login.dart';
+import 'package:kabanda_app/authentication/logout.dart';
 
 AppBar customAppBar() {
   final dp = FirebaseAuth.instance.currentUser!.photoURL!;
   return AppBar(
+    centerTitle: true,
     title: Text("Kabanda"),
     leading: Container(
       padding: const EdgeInsets.all(10),
@@ -16,7 +17,7 @@ AppBar customAppBar() {
     actions: [
       IconButton(
           onPressed: () {
-            AuthService().signOut();
+            logOut();
           },
           icon: const Icon(Icons.exit_to_app))
     ],

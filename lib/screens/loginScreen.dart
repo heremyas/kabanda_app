@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:kabanda_app/utilities/login.dart';
+import 'package:kabanda_app/authentication/login.dart';
 import 'package:kabanda_app/widgets/appBar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,8 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: InkWell(
           child: Text('Sign in with Google'),
           onTap: () {
-            print('tapped');
-            AuthService().signup(context);
+            LogIn().logIn(context);
           },
         ),
       ),

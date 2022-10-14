@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kabanda_app/authentication/main.dart';
 import 'package:kabanda_app/screens/homeLoading.dart';
 import 'package:kabanda_app/screens/loginScreen.dart';
-import 'package:kabanda_app/utilities/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,11 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Kabanda',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
+      theme: ThemeData(primarySwatch: Colors.red),
       // home: const MyHomePage(title: 'Kabanda'),
-      home: AuthService().handleAuthService(),
+      home: handleAuthService(),
       // home: HomeLoading(),
     );
   }
