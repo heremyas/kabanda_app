@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:kabanda_app/utilities/addBand.dart';
+import 'package:kabanda_app/utilities/displayBandImage.dart';
 import 'package:kabanda_app/utilities/fileUpload.dart';
 import 'package:kabanda_app/utilities/queryUserById.dart';
 import 'package:kabanda_app/utilities/readGenres.dart';
+import 'package:kabanda_app/widgets/bandImageSelection.dart';
 import 'package:kabanda_app/widgets/imagePicker.dart';
+import 'package:path/path.dart';
 
 class BandForm extends StatefulWidget {
   BandForm({Key? key}) : super(key: key);
@@ -24,11 +27,13 @@ class _BandFormState extends State<BandForm> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  final List membersController = [TextEditingController()];
+  // final List membersController = [TextEditingController()];
   String selectedGenre = 'Rock';
 
-  List<Map> members = [];
-  List<Widget> bandImage = [];
+  List members = [];
+  List<File> bandImage = [];
+  File? _bandImage;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -104,8 +109,52 @@ class _BandFormState extends State<BandForm> {
               padding: const EdgeInsets.all(8.0),
               child: Text('Members'),
             ),
-            ...members,
+            // Column(
+            //   children: members.length == 0
+            //       ? members.map((e) {
+            //           return Padding(
+            //               padding: const EdgeInsets.all(8.0),
+            //               child: TextFormField(
+            //                 controller: e,
+            //                 initialValue: '',
+            //                 validator: (value) {
+            //                   if (value!.isEmpty) {
+            //                     return 'Please enter some text';
+            //                   }
+            //                   return null;
+            //                 },
+            //                 decoration: InputDecoration(
+            //                   border: OutlineInputBorder(),
+            //                   labelText: 'Member ${members.length + 1}',
+            //                 ),
+            //               ));
+            //         }).toList()
+            //       : [],
+            // ),
 
+            ListView.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: members.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: members[index],
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Member',
+                      ),
+                    ));
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -114,8 +163,8 @@ class _BandFormState extends State<BandForm> {
                       onPressed: () {
                         setState(() {
                           if (members.length < 7) {
-                            members.add(addMember(members.length));
-                            membersController.add(TextEditingController());
+                            members.add(TextEditingController());
+                            // membersController.add(TextEditingController());
                           }
                         });
                       },
@@ -155,50 +204,62 @@ class _BandFormState extends State<BandForm> {
               child: Text('Band Image'),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (bandImage.isEmpty) {
-                          final result = showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext bc) {
-                                return FilePicker();
-                              }).then((value) {
-                            setState(() {
-                              if (bandImage.length < 2 && value != null) {
-                                bandImage.add(Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.file(File(value)),
-                                ));
-                              }
-                            });
-                          });
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('You can only upload one image.')));
-                        }
-                      },
-                      child: Text('Upload Band Image')),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (bandImage.isNotEmpty) {
-                            bandImage.clear();
-                          }
-                        });
-                      },
-                      child: Text('Remove'))
-                ],
-              ),
-            ),
+            BandImageSelection(),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Row(
+            //     children: [
+            //       ElevatedButton(
+            //           onPressed: () async {
+            //             if (bandImage.isEmpty) {
+            //               showModalBottomSheet(
+            //                   context: context,
+            //                   builder: (BuildContext bc) {
+            //                     return FilePicker();
+            //                   }).then((value) async {
+            //                 setState(() {
+            //                   if (bandImage.length <= 1 && value != null) {
+            //                     _bandImage = value;
+            //                     bandImage.add(value);
+            //                   }
+            //                 });
+            //               });
+            //             } else {
+            //               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //                   content: Text('You can only upload one image.')));
+            //             }
+            //           },
+            //           child: Text('Add Band Image')),
+            //       SizedBox(
+            //         width: 10,
+            //       ),
+            //       ElevatedButton(
+            //           onPressed: () {
+            //             setState(() {
+            //               if (bandImage.isNotEmpty) {
+            //                 bandImage.clear();
+            //               }
+            //             });
+            //           },
+            //           child: Text('Remove'))
+            //     ],
+            //   ),
+            // ),
 
-            ...bandImage,
+            // ListView.builder(
+            //     physics: const BouncingScrollPhysics(),
+            //     scrollDirection: Axis.vertical,
+            //     shrinkWrap: true,
+            //     itemCount: bandImage.length,
+            //     itemBuilder: (context, index) {
+            //       return FutureBuilder(builder: )
+
+            //       // Padding(
+            //       //   padding: const EdgeInsets.all(8.0),
+            //       //   child: Image.file(File(bandImage[index].path)),
+            //       // );
+            //     }),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -211,10 +272,14 @@ class _BandFormState extends State<BandForm> {
                             uid: uid,
                             bandName: nameController.value.text,
                             genre: selectedGenre,
-                            description: descriptionController.value.text)) {
-                          Navigator.pop(context);
+                            description: descriptionController.value.text,
+                            members: members.map((e) => e.value.text).toList(),
+                            bandImagePath: await convertToBandImageUrl(
+                                basename(bandImage.first.path)))) {
                         } else {
-                          print('band limitation reached');
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Band Creation Limitation Reachedx')));
                         }
                       }
                     },
@@ -225,29 +290,6 @@ class _BandFormState extends State<BandForm> {
         ),
       ),
     );
-  }
-
-  Map addMember(int members) {
-    return {
-      'widget': Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          controller: membersController[membersController.length],
-          initialValue: '',
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Member ${members + 1}',
-          ),
-        ),
-      ),
-      'controller': TextEditingController()
-    };
   }
 
   List<DropdownMenuItem<String>> addGenreItem(

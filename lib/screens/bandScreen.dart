@@ -79,7 +79,7 @@ class _BandScreenState extends State<BandScreen> {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   } else {
-                                    print('loading');
+                                    print('error occured');
                                   }
                                 },
                                 child: Text('DELETE'),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kabanda_app/model/band.dart';
 import 'package:kabanda_app/screens/bandScreen.dart';
+import 'package:kabanda_app/utilities/displayBandImage.dart';
 import 'package:kabanda_app/utilities/queryUserById.dart';
 import 'package:kabanda_app/utilities/readBands.dart';
 import 'package:kabanda_app/widgets/buildUser.dart';
@@ -38,10 +39,9 @@ class FeedItemsList extends StatelessWidget {
                                         )));
                           },
                           leading: CircleAvatar(
-                            // radius: 50,
-                            backgroundImage: NetworkImage(
-                                'https://upload.wikimedia.org/wikipedia/en/b/b2/Metallica_-_Master_of_Puppets_cover.jpg'),
-                          ),
+                              // radius: 50,
+                              backgroundImage:
+                                  NetworkImage(data['bandImagePath'])),
                           title: Text(data['bandName']),
                           subtitle: Text(data['genre'] +
                               '\n\nCreated by ' +

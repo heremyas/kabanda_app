@@ -10,19 +10,18 @@ class ImageUpload {
   final _imagePicker = ImagePicker();
   File? _image;
 
-  Future imgFromGallery() async {
+  Future<bool> imgFromGallery() async {
     final selectedFile =
         await _imagePicker.pickImage(source: ImageSource.gallery);
 
     if (selectedFile != null) {
       _image = File(selectedFile.path);
 
-      // return true;
-      return selectedFile.path;
+      return true;
     } else {
       // return 'no image selected';
       print('no image selected');
-      return null;
+      return false;
     }
   }
 
@@ -34,8 +33,11 @@ class ImageUpload {
     try {
       final ref = FirebaseStorage.instance.ref(destination).child('file/');
       await ref.putFile(_image!);
+      print('success');
+      return true;
     } catch (e) {
       print('error occured');
+      return false;
     }
   }
 }
