@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart';
@@ -10,17 +11,17 @@ class ImageUpload {
   final _imagePicker = ImagePicker();
   File? _image;
 
-  Future<bool> imgFromGallery() async {
+  Future<bool> imgFromGallery(context) async {
     final selectedFile =
         await _imagePicker.pickImage(source: ImageSource.gallery);
 
     if (selectedFile != null) {
       _image = File(selectedFile.path);
 
+      await uploadFile();
       return true;
     } else {
       // return 'no image selected';
-      print('no image selected');
       return false;
     }
   }
