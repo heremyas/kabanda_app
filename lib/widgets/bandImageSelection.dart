@@ -1,7 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:kabanda_app/utilities/fileUpload.dart';
+import 'package:kabanda_app/utilities/BandImageUpload/fileUpload.dart';
+import 'package:kabanda_app/utilities/BandImageUpload/removeBandImage.dart';
 
 class BandImageSelection extends StatefulWidget {
   const BandImageSelection({Key? key}) : super(key: key);
@@ -11,21 +13,26 @@ class BandImageSelection extends StatefulWidget {
 }
 
 class _BandImageSelectionState extends State<BandImageSelection> {
+  bool isImageUploaded = false;
   bool isUploading = false;
-  String imageUrl = 'assets/images/defaultBandImage.jpeg';
+  final String defaultImage = 'assets/images/defaultBandImage.jpeg';
+  Map uploadedBandImageUrl = {};
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         height: 400,
         child: DecoratedBox(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(imageUrl), fit: BoxFit.cover)),
+                    image: !isImageUploaded
+                        ? AssetImage(defaultImage) as ImageProvider
+                        : NetworkImage(uploadedBandImageUrl['downloadUrl']),
+                    fit: BoxFit.cover)),
             child: Center(
               child: isUploading
-                  ? CircularProgressIndicator()
+                  ? const CircularProgressIndicator()
                   : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       ElevatedButton(
                           onPressed: () {
@@ -44,10 +51,16 @@ class _BandImageSelectionState extends State<BandImageSelection> {
                                                 setState(() {
                                                   isUploading = true;
                                                 });
-                                                if (await ImageUpload()
-                                                    .imgFromGallery(context)) {
+                                                final uploadedImageUrl =
+                                                    await ImageUpload()
+                                                        .imgFromGallery(
+                                                            context);
+                                                if (uploadedImageUrl != null) {
                                                   setState(() {
                                                     isUploading = false;
+                                                    isImageUploaded = true;
+                                                    uploadedBandImageUrl =
+                                                        uploadedImageUrl;
                                                   });
                                                 } else {
                                                   print(
@@ -94,19 +107,24 @@ class _BandImageSelectionState extends State<BandImageSelection> {
                             //       content: Text('You can only upload one image.')));
                             // }
                           },
-                          child: Text('Upload Band Image')),
+                          child: Text(!isImageUploaded
+                              ? 'Upload Band Image'
+                              : 'Change Band Image')),
                       SizedBox(
                         width: 10,
                       ),
-                      ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              // if (bandImage.isNotEmpty) {
-                              //   bandImage.clear();
-                              // }
-                            });
-                          },
-                          child: Text('Remove'))
+                      !isImageUploaded
+                          ? Text('')
+                          : ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  isImageUploaded = false;
+                                  removeBandImage(
+                                          uploadedBandImageUrl['imagePath'])
+                                      .then((value) => print(value));
+                                });
+                              },
+                              child: Text('Remove'))
                     ]),
               // child:
               //     Image(image: AssetImage('assets/images/defaultBandImage.jpeg')),
