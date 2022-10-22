@@ -34,6 +34,8 @@ class _BandFormState extends State<BandForm> {
   List<File> bandImage = [];
   File? _bandImage;
 
+  String testState = '';
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -274,7 +276,7 @@ class _BandFormState extends State<BandForm> {
                             genre: selectedGenre,
                             description: descriptionController.value.text,
                             members: members.map((e) => e.value.text).toList(),
-                            bandImagePath: await convertToBandImageUrl(
+                            bandImageUrl: await convertToBandImageUrl(
                                 basename(bandImage.first.path)))) {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

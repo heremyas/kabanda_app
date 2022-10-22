@@ -16,7 +16,7 @@ class _BandImageSelectionState extends State<BandImageSelection> {
   bool isImageUploaded = false;
   bool isUploading = false;
   final String defaultImage = 'assets/images/defaultBandImage.jpeg';
-  Map uploadedBandImageUrl = {};
+  ValueNotifier<Map> uploadedBandImageUrl = ValueNotifier<Map>({});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,10 @@ class _BandImageSelectionState extends State<BandImageSelection> {
                 image: DecorationImage(
                     image: !isImageUploaded
                         ? AssetImage(defaultImage) as ImageProvider
-                        : NetworkImage(uploadedBandImageUrl['downloadUrl']),
+                        : ValueListenableBuilder(
+                            valueListenable: uploadedBandImageUrl,
+                            builder: ((context, value, child) =>
+                                NetworkImage(value))) as NetworkImage,
                     fit: BoxFit.cover)),
             child: Center(
               child: isUploading
