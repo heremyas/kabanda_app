@@ -14,10 +14,34 @@ class CreateBandScreen extends StatefulWidget {
 class _CreateBandScreenState extends State<CreateBandScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: customAppBar(),
-      body: BandForm(),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: customAppBar(),
+          body: BandForm(),
+        ),
+        onWillPop: () async {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: const Text('Wait!'),
+                    content: const Text(
+                        'Are you sure you want to quit band creation?'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: Text('Yes')),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('No'))
+                    ],
+                  ));
+          return true;
+        });
   }
 }

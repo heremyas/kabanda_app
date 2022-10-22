@@ -7,7 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:kabanda_app/utilities/addBand.dart';
 import 'package:kabanda_app/utilities/displayBandImage.dart';
-import 'package:kabanda_app/utilities/fileUpload.dart';
+import 'package:kabanda_app/utilities/BandImageUpload/fileUpload.dart';
 import 'package:kabanda_app/utilities/queryUserById.dart';
 import 'package:kabanda_app/utilities/readGenres.dart';
 import 'package:kabanda_app/widgets/bandImageSelection.dart';
@@ -33,6 +33,8 @@ class _BandFormState extends State<BandForm> {
   List members = [];
   List<File> bandImage = [];
   File? _bandImage;
+
+  String testState = '';
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +135,7 @@ class _BandFormState extends State<BandForm> {
             // ),
 
             ListView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: members.length,
@@ -169,7 +171,7 @@ class _BandFormState extends State<BandForm> {
                         });
                       },
                       child: Text('Add')),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   ElevatedButton(
@@ -274,7 +276,7 @@ class _BandFormState extends State<BandForm> {
                             genre: selectedGenre,
                             description: descriptionController.value.text,
                             members: members.map((e) => e.value.text).toList(),
-                            bandImagePath: await convertToBandImageUrl(
+                            bandImageUrl: await convertToBandImageUrl(
                                 basename(bandImage.first.path)))) {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

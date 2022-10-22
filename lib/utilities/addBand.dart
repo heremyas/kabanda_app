@@ -8,7 +8,7 @@ Future<bool> addBand(
     required String genre,
     required String description,
     required List members,
-    required String bandImagePath}) async {
+    required String bandImageUrl}) async {
   if (await LimitBandCreation().isNotMaxReached(uid)) {
     final docUser =
         FirebaseFirestore.instance.collection('created_bands').doc();
@@ -19,7 +19,7 @@ Future<bool> addBand(
       'genre': genre,
       'description': description,
       'members': members,
-      'bandImagePath': bandImagePath
+      'bandImageUrl': bandImageUrl
     };
 
     await docUser.set(jsonData);
